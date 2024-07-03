@@ -3,7 +3,6 @@ package it.polito.emergency;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 import java.util.*;
 import static java.util.stream.Collectors.*;
 
@@ -17,6 +16,7 @@ public class EmergencyApp {
 
     private Map<String, Professional> professionals = new HashMap<>();
     private Map<String, Department> departments = new HashMap<>();
+    private Map<String, Patient> patients = new HashMap<>();
     
     /**
      * Add a professional working in the emergency room
@@ -185,7 +185,7 @@ public class EmergencyApp {
             }
 
             return n;
-            
+
         } catch(IOException e){
             throw new IOException();
         }
@@ -203,8 +203,13 @@ public class EmergencyApp {
      * @param dateTimeAccepted The date and time the patient was accepted into the emergency system.
      */
     public Patient addPatient(String fiscalCode, String name, String surname, String dateOfBirth, String reason, String dateTimeAccepted) {
-        //TODO: to be implemented
-        return null;
+        
+        if (patients.containsKey(fiscalCode))
+            return patients.get(fiscalCode);
+
+        patients.put(fiscalCode, new Patient(fiscalCode, name, surname, dateOfBirth, reason, dateTimeAccepted));
+
+        return patients.get(fiscalCode);
     }
 
     /**
@@ -215,8 +220,15 @@ public class EmergencyApp {
      *         Returns an empty collection if no match is found.
      */    
     public List<Patient> getPatient(String identifier) throws EmergencyException {
-        //TODO: to be implemented
-        return null;
+        
+        List<Patient> l = patients.values().stream()
+        .filter(p -> p.getFiscalCode().equals(identifier) || p.getSurname().equals(identifier))
+        .collect(toList());
+
+        if (l.isEmpty())
+            throw new EmergencyException();
+
+        return l;
     }
 
     /**
@@ -228,8 +240,12 @@ public class EmergencyApp {
      *         Returns an empty list if no patients were accepted on that date.
      */
     public List<String> getPatientsByDate(String date) {
-        //TODO: to be implemented
-        return null;
+        
+        return patients.values().stream()
+        .filter(p-> p.getDateTimeAccepted().equals(date))
+        .sorted(Comparator.comparing(Patient::getSurname).thenComparing(Patient::getName))
+        .map(Patient::getFiscalCode)
+        .collect(toList());
     }
 
     /**
