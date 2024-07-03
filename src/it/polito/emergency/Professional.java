@@ -2,27 +2,65 @@ package it.polito.emergency;
 
 public class Professional {
 
+
+    private String id;
+    private String specialization;
+    private String first;
+    private String last;
+    private String period;
+    private String start;
+    private String end;
+
+
+    public Professional(String id, String first, String last, String specialization, String period){
+        this.id = id;
+        this.first = first;
+        this.last = last;
+        this.specialization = specialization;
+        this.period = period;
+        this.start = startEndDuty(period)[0];
+        this.end = startEndDuty(period)[1];
+    }
+
     public String getId() {
-        return null;
+        return id;
     }
 
     public String getName() {
-        return null;
+        return first;
     }
 
     public String getSurname() {
-        return null;
+        return last;
     }
 
     public String getSpecialization() {
-        return null;
+        return specialization;
     }
 
     public String getPeriod() {
-        return null;
+        return period;
     }
 
     public String getWorkingHours() {
         return null;
+    }
+
+    public String[] startEndDuty(String period){
+        return period.split(" to ");
+    }
+
+    public boolean isAvailable(String period){
+        String [] startEnd = period.split(" to ");
+        String start = startEnd[0];
+        String end = startEnd[1];
+
+        if (this.start.compareTo(start) <= 0 && this.end.compareTo(end) >= 0)
+            return true;
+
+        return false;
+
+        
+
     }
 }
