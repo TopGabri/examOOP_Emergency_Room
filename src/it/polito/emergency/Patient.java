@@ -51,4 +51,12 @@ public class Patient {
     public PatientStatus getStatus() {
         return status;
     }
+
+    public void discharge(){
+        status = PatientStatus.DISCHARGED;
+    }
+
+    public void hospitalize(){
+        status = PatientStatus.HOSPITALIZED;
+    }
 }

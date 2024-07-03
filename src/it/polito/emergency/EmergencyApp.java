@@ -303,7 +303,20 @@ public class EmergencyApp {
      * @throws EmergencyException If the patient does not exist or if the department does not exist.
      */
     public void dischargeOrHospitalize(String fiscalCode, String departmentName) throws EmergencyException {
-        //TODO: to be implemented
+        
+        if (!patients.containsKey(fiscalCode) || !departments.containsKey(departmentName))
+            throw new EmergencyException();
+
+        Patient p = patients.get(fiscalCode);
+
+        Department d = departments.get(departmentName);
+
+        if (d.hasAvailableBeds()){
+            d.hospitalize(p);
+            p.hospitalize();
+        } else {
+            p.discharge();
+        }
     }
 
     /**
@@ -314,8 +327,18 @@ public class EmergencyApp {
      * @throws EmergencyException If no patient is found with the given fiscal code.
      */
     public int verifyPatient(String fiscalCode) throws EmergencyException{
-        //TODO: to be implemented
-        return -1;
+        
+        if (!patients.containsKey(fiscalCode))
+            throw new EmergencyException();
+
+        PatientStatus s = patients.get(fiscalCode).getStatus();
+
+        if (s.equals(PatientStatus.DISCHARGED))
+            return 0;
+        else if (s.equals(PatientStatus.HOSPITALIZED))
+            return 1;
+        else 
+            return -1;
     }
 
     /**
