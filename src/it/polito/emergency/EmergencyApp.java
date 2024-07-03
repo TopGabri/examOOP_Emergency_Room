@@ -17,6 +17,8 @@ public class EmergencyApp {
     private Map<String, Professional> professionals = new HashMap<>();
     private Map<String, Department> departments = new HashMap<>();
     private Map<String, Patient> patients = new HashMap<>();
+    private Map<String, Report> reports = new HashMap<>();
+    private String reportId = "1";
     
     /**
      * Add a professional working in the emergency room
@@ -257,13 +259,40 @@ public class EmergencyApp {
      * @throws EmergencyException If the patient does not exist, if no professionals with the required specialization are found, or if none are available during the period of the request.
      */
     public String assignPatientToProfessional(String fiscalCode, String specialization) throws EmergencyException {
-        //TODO: to be implemented
-        return null;
+        
+        if (!patients.containsKey(fiscalCode))
+            throw new EmergencyException();
+
+        Optional <String> pr = professionals.values().stream()
+        .filter(p -> p.getSpecialization().equals(specialization))
+        .filter(p -> p.isAvaliableForPatient(patients.get(fiscalCode).getDateTimeAccepted()))
+        .sorted(Comparator.comparing(Professional::getId))
+        .map(Professional::getId)
+        .findFirst();
+
+        if (pr.isPresent()){
+            return pr.get();
+
+        }
+            
+
+        throw new EmergencyException();
+
     }
 
     public Report saveReport(String professionalId, String fiscalCode, String date, String description) throws EmergencyException {
-        //TODO: to be implemented
-        return null;
+        
+        if (!professionals.containsKey(professionalId))
+            throw new EmergencyException();
+
+        reports.put(reportId, new Report(reportId, professionalId, fiscalCode, date, description));
+
+        String tmp = reportId;
+        int x = Integer.parseInt(reportId);
+        x++;
+        reportId = Integer.toString(x);
+
+        return reports.get(tmp);
     }
 
     /**

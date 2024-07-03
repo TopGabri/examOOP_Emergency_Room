@@ -58,9 +58,14 @@ public class Professional {
         if (this.start.compareTo(start) <= 0 && this.end.compareTo(end) >= 0)
             return true;
 
+        return false;       
+    }
+
+    public boolean isAvaliableForPatient(String date){
+
+        if (this.start.compareTo(date) <= 0 && this.end.compareTo(date) >= 0)
+            return true;
+
         return false;
-
-        
-
     }
 }
