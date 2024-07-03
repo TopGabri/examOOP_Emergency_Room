@@ -1,5 +1,7 @@
 package it.polito.emergency;
 
+import java.util.*;
+
 public class Professional {
 
 
@@ -10,6 +12,7 @@ public class Professional {
     private String period;
     private String start;
     private String end;
+    private List<Patient> patients = new LinkedList<>();
 
 
     public Professional(String id, String first, String last, String specialization, String period){
@@ -67,5 +70,15 @@ public class Professional {
             return true;
 
         return false;
+    }
+
+    public void assignPatient(Patient p){
+
+        patients.add(p);
+
+    }
+
+    public List<Patient> getPatients(){
+        return patients;
     }
 }

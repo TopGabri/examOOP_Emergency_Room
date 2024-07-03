@@ -27,5 +27,9 @@ public class Department {
         }
     }
 
+    public List<Patient> getPatients(){
+        return patients;
+    }
+
     
 }

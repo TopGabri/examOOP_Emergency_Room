@@ -271,8 +271,9 @@ public class EmergencyApp {
         .findFirst();
 
         if (pr.isPresent()){
-            return pr.get();
 
+            professionals.get(pr.get()).assignPatient(patients.get(fiscalCode));
+            return pr.get();
         }
             
 
@@ -347,8 +348,10 @@ public class EmergencyApp {
      * @return The total number of patients in the system.
      */    
     public int getNumberOfPatients() {
-        //TODO: to be implemented
-        return -1;
+        
+        return (int) patients.values().stream()
+        .filter(p -> p.getStatus().equals(PatientStatus.ADMITTED))
+        .count();
     }
 
     /**
@@ -358,13 +361,19 @@ public class EmergencyApp {
      * @return The count of patients admitted on that date.
      */
     public int getNumberOfPatientsByDate(String date) {
-        //TODO: to be implemented
-        return -1;
+
+        return (int) patients.values().stream()
+        .filter(p -> p.getDateOfBirth().equals(date))
+        .count();
+        
     }
 
     public int getNumberOfPatientsHospitalizedByDepartment(String departmentName) throws EmergencyException {
-        //TODO: to be implemented
-        return -1;
+        
+        if (!departments.containsKey(departmentName))
+            throw new EmergencyException();
+
+        return (int) departments.get(departmentName).getPatients().stream().count();
     }
 
     /**
@@ -373,8 +382,11 @@ public class EmergencyApp {
      * @return The count of discharged patients.
      */
     public int getNumberOfPatientsDischarged() {
-        //TODO: to be implemented
-        return -1;
+        
+        return (int) patients.values().stream()
+        .filter(p -> p.getStatus().equals(PatientStatus.DISCHARGED))
+        .count();
+        
     }
 
     /**
@@ -384,7 +396,13 @@ public class EmergencyApp {
      * @return The count of discharged patients treated by professionals of the given specialization.
      */
     public int getNumberOfPatientsAssignedToProfessionalDischarged(String specialization) {
-        //TODO: to be implemented
-        return -1;
+        
+        return (int) professionals.values().stream()
+        .filter(p -> p.getSpecialization().equals(specialization))
+        .map(p->p.getPatients())
+        .flatMap(Collection::stream)
+        .filter(p -> p.getStatus().equals(PatientStatus.DISCHARGED))
+        .count();
+
     }
 }
