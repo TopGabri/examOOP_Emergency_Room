@@ -22,7 +22,7 @@ public class TestR1 {
 	private EmergencyApp app;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         app = new EmergencyApp();
 		app.addProfessional("1","John","Doe","Cardiology","2024-01-01 to 2024-12-31");	
 		app.addProfessional("2","Mik","Smith","Surgery","2024-05-01 to 2024-05-28");		
@@ -80,6 +80,12 @@ public class TestR1 {
     }
 
     @Test
+    public void testAddDepartmentsDoesNotThrowsEception() throws Exception {
+        Class[] exceptions = EmergencyApp.class.getMethod("addDepartment", String.class, int.class).getExceptionTypes();
+        assertEquals("No exception should be thrown", 0, exceptions.length);
+    }
+
+    @Test
     public void testGetDepartments() throws EmergencyException {
         List<String> departments = app.getDepartments();
         assertEquals(2,departments.size());
@@ -117,7 +123,7 @@ public class TestR1 {
     @Test
     public void testReadFromFileDepartments() throws IOException {
         EmergencyApp appnew = new EmergencyApp();
-        StringReader reader = new StringReader("name,maxPatients\nCardiology,20");
+        StringReader reader = new StringReader("departmentName,maxPatients\nCardiology,20");
         int count = appnew.readFromFileDepartments(reader);
         assertEquals(1, count);
     }

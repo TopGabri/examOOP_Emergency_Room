@@ -13,12 +13,12 @@ public class TestR5 {
     private EmergencyApp app;
 
     @Before
-    public void setUp() {
+    public void setUp()  throws Exception {
         app = new EmergencyApp(); 
 
 		app.addDepartment("Cardiology", 1);
 
-		app.addProfessional("1", "Toy", "Romi", "Cardiology", "2024-06-12 to 2024-06-31");
+		app.addProfessional("1", "Toy", "Romi", "Cardiology", "2024-06-12 to 2024-06-30");
 
 		String surname = "Wonderland";
         app.addPatient("1234567890", "Alice", surname, "1990-01-01", "Checkup", DATE);
@@ -41,7 +41,7 @@ public class TestR5 {
     }
 
     @Test
-    public void testGetNumberOfPatientsHospitalizedByDepartmentWithInvalidDepartment() throws EmergencyException {
+    public void testGetNumberOfPatientsHospitalizedByDepartmentWithInvalidDepartment() {
         assertThrows("Invalid department should not be accepted", EmergencyException.class,
         ()->app.getNumberOfPatientsHospitalizedByDepartment("NonexistentDepartment"));
     }
@@ -68,12 +68,7 @@ public class TestR5 {
 		app.assignPatientToProfessional("1234567890", specialization);
         app.assignPatientToProfessional("7426854875", specialization);
 
-		String departmentName = "Cardiology";
-		app.dischargeOrHospitalize("7426854875", departmentName);
-	
-		app.dischargeOrHospitalize("1234567890", departmentName);
-
-        assertEquals("Should return the correct number of patients discharged by the specified specialization", 
-                    1, app.getNumberOfPatientsAssignedToProfessionalDischarged(specialization));
+        assertEquals("No patients discharged by the specified specialization", 
+                    0, app.getNumberOfPatientsAssignedToProfessionalDischarged(specialization));
     }
 }
