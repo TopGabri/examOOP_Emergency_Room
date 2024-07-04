@@ -5,7 +5,7 @@ public class Department {
 
     private String name;
     private int capacity;
-    private List<Patient> patients;
+    private List<Patient> patients = new LinkedList<>();
 
 
 	public Department(String name, int capacity) {

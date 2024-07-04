@@ -177,7 +177,7 @@ public class EmergencyApp {
             reader.read(characters);
 
             String file = new String(characters);
-
+            file = file.replaceFirst("\u0000+$", "");
             String [] lines = file.split("\n");
 
             for (int i = 1; i < lines.length; i++){
@@ -227,8 +227,7 @@ public class EmergencyApp {
         .filter(p -> p.getFiscalCode().equals(identifier) || p.getSurname().equals(identifier))
         .collect(toList());
 
-        if (l.isEmpty())
-            throw new EmergencyException();
+        
 
         return l;
     }
@@ -363,7 +362,7 @@ public class EmergencyApp {
     public int getNumberOfPatientsByDate(String date) {
 
         return (int) patients.values().stream()
-        .filter(p -> p.getDateOfBirth().equals(date))
+        .filter(p -> p.getDateTimeAccepted().equals(date))
         .count();
         
     }
